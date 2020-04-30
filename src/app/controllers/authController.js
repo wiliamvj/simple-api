@@ -52,4 +52,6 @@ router.post('/authenticate', async (req, res) => {
   });
 });
 
+router.post('/forgot_password', asyn());
+
 module.exports = (app) => app.use('/auth', router);
