@@ -10,11 +10,10 @@ router.use(authMiddleware);
 
 router.get('/', async (req, res) => {
   try {
-    const projects = await Project.find();
+    const projects = await Project.find().populate('user');
 
     return res.send({ projects });
   } catch (err) {
-    console.log(err);
     return res.status(400).send({ error: 'Error list projects' });
   }
 });
@@ -25,7 +24,8 @@ router.get('/:project:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const project = await Project.create(req.body);
+    const project = await Project.create({ ...req.body, user: req.userId });
+    console.log(req.userId);
 
     return res.send({ project });
   } catch (err) {
@@ -38,7 +38,7 @@ router.put('/:project:id', async (req, res) => {
 });
 
 router.delete('/:project:id', async (req, res) => {
-  res.send({ ok: true, user: req.userId });
+  res.send({ ok: true, user: (req.userId = 'OK') });
 });
 
 module.exports = (app) => app.use('/projects', router);
